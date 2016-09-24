@@ -2,7 +2,7 @@ package example
 import scala.scalajs.js.annotation.JSExport
 import org.scalajs.dom
 import org.scalajs.dom.html
-import org.scalajs.dom.html.{LI, UList}
+import org.scalajs.dom.html.{Div, LI, UList}
 
 import scalatags.JsDom.TypedTag
 import scalatags.JsDom.all._
@@ -32,25 +32,42 @@ object DB {
     4 -> Pigeon("Graham", 2, Standing(Pecking)),
     5 -> Pigeon("All", 2, Landing)
   )
+
+  def removePigeon(): Unit = {
+    pigeons = pigeons.tail
+  }
 }
 
 @JSExport
 object ScalaJSExample {
 
   @JSExport
-  def main(pigeonsDiv: html.Element): Unit = {
+  def main(mainDiv: html.Element): Unit = {
 
-    val showAlertButton = button(
-      onclick := (() => dom.window.alert("helou")),
-      "show alert"
+    val pigeonDiv = div().render
+    mainDiv.innerHTML = ""
+    mainDiv.appendChild(pigeonDiv)
+
+    val killPigeonButton = button(
+      onclick := {() =>
+        DB.removePigeon()
+        renderPigeons(pigeonDiv)
+      },
+      "kill pigeon"
     ).render
 
-    val pigeonsList: UList = ul(DB.pigeons.map { case (id, pigeon) => li(pigeon.name) }.toSeq: _*).render
+    renderPigeons(pigeonDiv)
 
-    pigeonsDiv.innerHTML = ""
-    pigeonsDiv.appendChild(pigeonsList)
-    pigeonsDiv.appendChild(pigeonsList)
+    mainDiv.appendChild(killPigeonButton)
+  }
 
-    pigeonsDiv.appendChild(showAlertButton)
+  def renderPigeons(pigeonDiv: Div) = {
+    dom.console.log("rendering")
+    val pigeonsList: UList = ul(DB.pigeons.map { case (id, pigeon) =>
+      li(pigeon.name) }.toSeq: _*).render
+
+    pigeonDiv.innerHTML = ""
+    pigeonDiv.appendChild(pigeonsList)
+    pigeonDiv.appendChild(pigeonsList)
   }
 }
