@@ -40,10 +40,17 @@ object ScalaJSExample {
   @JSExport
   def main(pigeonsDiv: html.Element): Unit = {
 
-    val xs: Seq[TypedTag[LI]] = DB.pigeons.map { case (id, pigeon) => li(pigeon.name) }.toSeq: _*
-    val pigeonsList: UList = ul(xs).render
+    val showAlertButton = button(
+      onclick := (() => dom.window.alert("helou")),
+      "show alert"
+    ).render
+
+    val pigeonsList: UList = ul(DB.pigeons.map { case (id, pigeon) => li(pigeon.name) }.toSeq: _*).render
 
     pigeonsDiv.innerHTML = ""
     pigeonsDiv.appendChild(pigeonsList)
+    pigeonsDiv.appendChild(pigeonsList)
+
+    pigeonsDiv.appendChild(showAlertButton)
   }
 }
