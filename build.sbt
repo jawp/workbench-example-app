@@ -4,7 +4,7 @@ enablePlugins(ScalaJSPlugin)
 
 workbenchSettings
 
-name := "Example"
+name := "Scala JS Example"
 
 version := "0.1-SNAPSHOT"
 
